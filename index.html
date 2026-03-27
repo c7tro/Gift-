@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minecraft Message Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Minecraft Message Mobile</title>
 
 <style>
 body {
@@ -12,7 +12,7 @@ body {
   font-family: sans-serif;
 }
 
-/* السماء */
+/* الخلفية */
 #game {
   width: 100vw;
   height: 100vh;
@@ -23,89 +23,99 @@ body {
 /* الشمس */
 .sun {
   position: absolute;
-  top: 40px;
-  right: 60px;
-  width: 80px;
-  height: 80px;
-  background: #ffd966;
-  box-shadow: 0 0 40px #ffd966;
-}
-
-/* سحب */
-.cloud {
-  position: absolute;
-  width: 120px;
+  top: 20px;
+  right: 20px;
+  width: 60px;
   height: 60px;
-  background: white;
-  opacity: 0.8;
-  animation: moveClouds 30s linear infinite;
-}
-@keyframes moveClouds {
-  from { transform: translateX(-200px); }
-  to { transform: translateX(120vw); }
+  background: #ffd966;
+  box-shadow: 0 0 30px #ffd966;
 }
 
-/* أرض pixel وردية */
+/* أرض */
 .ground {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 40%;
+  height: 45%;
   background:
-    repeating-linear-gradient(0deg,#ff9bb0 0px,#ff9bb0 32px,#ffb6c1 32px,#ffb6c1 64px),
-    repeating-linear-gradient(90deg,#ff9bb0 0px,#ff9bb0 32px,#ffb6c1 32px,#ffb6c1 64px);
+    repeating-linear-gradient(0deg,#ff9bb0 0px,#ff9bb0 24px,#ffb6c1 24px,#ffb6c1 48px),
+    repeating-linear-gradient(90deg,#ff9bb0 0px,#ff9bb0 24px,#ffb6c1 24px,#ffb6c1 48px);
 }
 
-/* شجرة pixel */
+/* شجر */
 .tree {
   position: absolute;
-  bottom: 40%;
+  bottom: 45%;
 }
 .trunk {
-  width: 20px;
-  height: 60px;
+  width: 14px;
+  height: 40px;
   background: #6b3e26;
   margin: auto;
 }
 .leaves {
-  width: 80px;
-  height: 60px;
+  width: 60px;
+  height: 40px;
   background:
-    repeating-linear-gradient(45deg,#2ecc71,#2ecc71 10px,#27ae60 10px,#27ae60 20px);
+    repeating-linear-gradient(45deg,#2ecc71,#2ecc71 8px,#27ae60 8px,#27ae60 16px);
 }
 
-/* الصندوق */
+/* الصندوق (أكبر للمس) */
 #box {
   position: absolute;
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
   background:
     repeating-linear-gradient(45deg,#8b5a2b,#8b5a2b 10px,#a66b3d 10px,#a66b3d 20px);
   border: 4px solid #5c3a1a;
-  cursor: pointer;
-  transition: transform 0.2s;
+  border-radius: 10px;
+  touch-action: manipulation;
 }
 
-/* انيميشن ضغط */
+/* انيميشن */
 @keyframes pop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+  50% { transform: scale(1.15); }
   100% { transform: scale(1); }
 }
 
+/* الصفحة الثانية */
 #page2 {
   display: none;
   width: 100vw;
   height: 100vh;
   background: #111;
   color: white;
-  text-align: center;
-  padding: 40px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
-input, button {
-  padding: 10px;
+h2 {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 15px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
   margin-top: 10px;
+  font-size: 16px;
+}
+
+#messages div {
+  margin-top: 10px;
+  padding: 10px;
+  background: #222;
+  border-radius: 6px;
 }
 </style>
 </head>
@@ -114,13 +124,9 @@ input, button {
 
 <div id="game">
   <div class="sun"></div>
-
-  <div class="cloud" style="top:50px;"></div>
-  <div class="cloud" style="top:120px; animation-duration:40s;"></div>
-
   <div class="ground"></div>
 
-  <div class="tree" style="left:15%">
+  <div class="tree" style="left:10%">
     <div class="leaves"></div>
     <div class="trunk"></div>
   </div>
@@ -139,7 +145,6 @@ input, button {
   </h2>
 
   <input type="text" id="msgInput" placeholder="اكتب رسالتك">
-  <br>
   <button onclick="addMessage()">إرسال</button>
 
   <div id="messages"></div>
@@ -153,31 +158,41 @@ let clicks = 0;
 let sound = document.getElementById("clickSound");
 
 function moveBox() {
-  let x = Math.random() * (window.innerWidth - 150);
-  let y = Math.random() * (window.innerHeight - 150);
+  let maxX = window.innerWidth - box.offsetWidth;
+  let maxY = window.innerHeight - box.offsetHeight;
+
+  let x = Math.random() * maxX;
+  let y = Math.random() * maxY;
+
   box.style.left = x + "px";
   box.style.top = y + "px";
 }
 
 moveBox();
 
-box.onclick = () => {
+/* دعم لمس + كليك */
+function handleClick() {
   clicks++;
+  sound.currentTime = 0;
   sound.play();
 
   box.style.animation = "pop 0.2s";
 
   if (clicks < 3) {
     moveBox();
-    box.style.transform = `scale(${1 - clicks * 0.2})`;
+    box.style.transform = `scale(${1 - clicks * 0.15})`;
   } else {
     document.getElementById("game").style.display = "none";
     document.getElementById("page2").style.display = "block";
   }
 
   setTimeout(()=> box.style.animation="",200);
-};
+}
 
+box.addEventListener("click", handleClick);
+box.addEventListener("touchstart", handleClick);
+
+/* رسائل */
 function addMessage() {
   let input = document.getElementById("msgInput");
   let text = input.value;
@@ -186,7 +201,6 @@ function addMessage() {
 
   let div = document.createElement("div");
   div.textContent = text;
-
   document.getElementById("messages").appendChild(div);
 
   localStorage.setItem("msgs",
