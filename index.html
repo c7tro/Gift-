@@ -2,10 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الصندوق ليما ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لعبة الصندوق الخاصة بيما ❤️</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
 
         * {
             margin: 0;
@@ -19,12 +19,10 @@
             color: #fff;
             overflow: hidden;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            touch-action: manipulation;
         }
 
-        /* الصفحة الأولى - اللعبة */
+        /* شاشة اللعبة */
         #game-screen {
             width: 100vw;
             height: 100vh;
@@ -35,19 +33,37 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.4s ease;
+            transition: opacity 0.6s ease;
         }
 
         #box {
             position: absolute;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: all 0.45s cubic-bezier(0.68, -0.4, 0.27, 1.4);
             user-select: none;
-            z-index: 10;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
         }
 
-        /* الصفحة الثانية - الرسالة */
+        /* تعليمات بسيطة في الأعلى */
+        .instructions {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            text-align: center;
+            z-index: 20;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 85%;
+        }
+
+        /* شاشة الرسالة بعد الفوز */
         #win-screen {
             display: none;
             width: 100vw;
@@ -59,59 +75,75 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
             padding: 20px;
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
 
-        .message {
-            background: rgba(0, 0, 0, 0.65);
-            padding: 30px 40px;
-            border-radius: 20px;
-            max-width: 90%;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        .message-container {
+            background: rgba(255, 255, 255, 0.92);
+            color: #333;
+            padding: 35px 30px;
+            border-radius: 24px;
+            max-width: 92%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+            text-align: center;
         }
 
-        .message h1 {
-            font-size: 2.2rem;
-            color: #ffd700;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px #000;
+        .message-container h1 {
+            font-size: 1.85rem;
+            color: #5c4033;
+            margin-bottom: 18px;
+            line-height: 1.4;
         }
 
-        .message p {
-            font-size: 1.4rem;
-            line-height: 1.8;
-            color: #fff;
+        .message-container p {
+            font-size: 1.22rem;
+            line-height: 1.85;
+            color: #444;
+            margin-bottom: 25px;
         }
 
-        .input-area {
-            width: 90%;
-            max-width: 600px;
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
+        .input-container {
+            width: 100%;
+            background: #fff;
+            border: 2px solid #d4b89e;
+            border-radius: 18px;
             padding: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         textarea {
             width: 100%;
-            height: 180px;
+            height: 160px;
             border: none;
             outline: none;
             font-family: 'Cairo', sans-serif;
             font-size: 1.1rem;
-            padding: 15px;
-            border-radius: 12px;
+            line-height: 1.7;
+            color: #333;
             resize: none;
+            padding: 10px;
         }
 
+        textarea::placeholder {
+            color: #888;
+        }
+
+        /* الصندوق الصغير الزينة */
         .small-box {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 45px;
-            opacity: 0.9;
+            bottom: 25px;
+            right: 25px;
+            width: 52px;
+            opacity: 0.85;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+
+        /* تأثير لمس لطيف */
+        #box:active {
+            transform: scale(0.88) !important;
         }
     </style>
 </head>
@@ -119,23 +151,30 @@
 
     <!-- شاشة اللعبة -->
     <div id="game-screen">
-        <img id="box" src="https://i.ibb.co/Gv4WhCgZ/IMG-7493.jpg" alt="الصندوق">
+        <div class="instructions">
+            اضغطي على الصندوق ✨<br>
+            كل مرة يروح مكان ثاني ويصغر
+        </div>
+        <img id="box" src="https://i.ibb.co/Gv4WhCgZ/IMG-7493.jpg" alt="صندوق">
     </div>
 
-    <!-- شاشة الفوز والرسالة -->
+    <!-- شاشة الرسالة بعد 8 محاولات -->
     <div id="win-screen">
-        <div class="message">
+        <div class="message-container">
             <h1>كيف حالك يما؟ ❤️</h1>
             <p>
                 هذا موقع ثاني سويته عشانك<br><br>
-                اكتبي ايش جاي على بالك يما<br><br>
-                ابن الغالي قاسم<br>
+                ايش رأيك فيه؟<br>
+                اكتبي ايش جاي على بالك يما
+            </p>
+            <p style="font-size:1.15rem; margin-top:15px; color:#5c4033;">
+                ابنك الغالي قاسم<br>
                 وسلمي على رحمه ورغد
             </p>
         </div>
 
-        <div class="input-area">
-            <textarea id="message-input" placeholder="اكتبي رسالتك هنا يما... ❤️"></textarea>
+        <div class="input-container">
+            <textarea id="message-input" placeholder="اكتبي رسالتك هنا يما..."></textarea>
         </div>
 
         <img src="https://i.ibb.co/60j1ZR7p/IMG-7488.jpg" class="small-box" alt="صندوق صغير">
@@ -145,28 +184,25 @@
         const box = document.getElementById('box');
         const gameScreen = document.getElementById('game-screen');
         const winScreen = document.getElementById('win-screen');
-        
+        const textarea = document.getElementById('message-input');
+
         let attempts = 0;
         const maxAttempts = 8;
-        
-        // أحجام الصندوق (تناقص تدريجياً)
-        const sizes = [320, 260, 210, 170, 135, 105, 80, 55];
-        
-        // وظيفة لتوليد موقع عشوائي داخل الشاشة
+
+        // أحجام متدرجة (من كبير إلى صغير جداً)
+        const sizes = [280, 235, 195, 160, 130, 105, 82, 58];
+
         function getRandomPosition() {
-            const maxX = window.innerWidth - 100;
-            const maxY = window.innerHeight - 100;
-            
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
-            
-            return {
-                left: Math.max(50, Math.min(randomX, maxX - 50)),
-                top: Math.max(50, Math.min(randomY, maxY - 50))
-            };
+            const padding = 60;
+            const maxX = window.innerWidth - sizes[attempts] - padding;
+            const maxY = window.innerHeight - sizes[attempts] - padding * 1.5;
+
+            const left = padding + Math.random() * maxX;
+            const top = padding + Math.random() * maxY;
+
+            return { left, top };
         }
 
-        // بداية اللعبة
         function startGame() {
             attempts = 0;
             box.style.width = sizes[0] + 'px';
@@ -177,48 +213,43 @@
             box.style.top = pos.top + 'px';
         }
 
-        // عند الضغط على الصندوق
-        box.addEventListener('click', function() {
+        box.addEventListener('click', () => {
             attempts++;
-            
+
             if (attempts >= maxAttempts) {
-                // الفوز - الانتقال للصفحة الثانية
+                // الانتقال إلى شاشة الرسالة
                 gameScreen.style.opacity = '0';
                 
                 setTimeout(() => {
                     gameScreen.style.display = 'none';
                     winScreen.style.display = 'flex';
-                    winScreen.style.opacity = '1';
-                }, 600);
-                
+                    setTimeout(() => {
+                        winScreen.style.opacity = '1';
+                    }, 50);
+                }, 650);
                 return;
             }
-            
-            // تغيير الحجم والمكان
-            const newSize = sizes[attempts];
-            box.style.width = newSize + 'px';
+
+            // تغيير الحجم والموقع
+            box.style.width = sizes[attempts] + 'px';
             
             const newPos = getRandomPosition();
             box.style.left = newPos.left + 'px';
             box.style.top = newPos.top + 'px';
-            
-            // تأثير بسيط عند الضغط
-            box.style.transform = 'scale(0.85)';
-            setTimeout(() => {
-                box.style.transform = 'scale(1)';
-            }, 150);
+
+            // تأثير ضغط لطيف
+            box.style.transform = 'scale(0.82)';
+            setTimeout(() => box.style.transform = 'scale(1)', 180);
         });
 
-        // بدء اللعبة عند تحميل الصفحة
-        window.onload = function() {
+        // بدء اللعبة
+        window.onload = () => {
             startGame();
         };
 
-        // جعل الرسالة تظهر في الموقع (للعرض فقط)
-        const textarea = document.getElementById('message-input');
-        textarea.addEventListener('input', function() {
-            // يمكنك إضافة حفظ أو عرض هنا إذا أردت في المستقبل
-            console.log('رسالة يما: ' + this.value);
+        // تحسين تجربة الكتابة على الجوال
+        textarea.addEventListener('focus', () => {
+            textarea.style.height = '200px';
         });
     </script>
 </body>
