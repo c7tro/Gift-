@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Minecraft Message Mobile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لعبة الرسالة</title>
 
 <style>
 body {
@@ -12,70 +12,34 @@ body {
   font-family: sans-serif;
 }
 
-/* الخلفية */
+/* الصفحة الأولى */
 #game {
   width: 100vw;
   height: 100vh;
   position: relative;
-  background: linear-gradient(#7ec0ee, #cceeff);
+  background: url("https://i.ibb.co/mC2dbzP9/IMG-7490.jpg") no-repeat center/cover;
 }
 
-/* الشمس */
-.sun {
+/* صور صغيرة */
+.decor {
   position: absolute;
-  top: 20px;
-  right: 20px;
   width: 60px;
-  height: 60px;
-  background: #ffd966;
-  box-shadow: 0 0 30px #ffd966;
+  opacity: 0.9;
 }
 
-/* أرض */
-.ground {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 45%;
-  background:
-    repeating-linear-gradient(0deg,#ff9bb0 0px,#ff9bb0 24px,#ffb6c1 24px,#ffb6c1 48px),
-    repeating-linear-gradient(90deg,#ff9bb0 0px,#ff9bb0 24px,#ffb6c1 24px,#ffb6c1 48px);
-}
-
-/* شجر */
-.tree {
-  position: absolute;
-  bottom: 45%;
-}
-.trunk {
-  width: 14px;
-  height: 40px;
-  background: #6b3e26;
-  margin: auto;
-}
-.leaves {
-  width: 60px;
-  height: 40px;
-  background:
-    repeating-linear-gradient(45deg,#2ecc71,#2ecc71 8px,#27ae60 8px,#27ae60 16px);
-}
-
-/* الصندوق (أكبر للمس) */
+/* الصندوق */
 #box {
   position: absolute;
-  width: 140px;
-  height: 140px;
-  background:
-    repeating-linear-gradient(45deg,#8b5a2b,#8b5a2b 10px,#a66b3d 10px,#a66b3d 20px);
-  border: 4px solid #5c3a1a;
-  border-radius: 10px;
+  width: 120px;
+  height: 120px;
+  background: url("https://i.ibb.co/TqcW4Ctn/IMG-7492.jpg") no-repeat center/contain;
   touch-action: manipulation;
 }
 
 /* انيميشن */
 @keyframes pop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+  50% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
 
@@ -84,11 +48,13 @@ body {
   display: none;
   width: 100vw;
   height: 100vh;
-  background: #111;
+  background: url("https://i.ibb.co/nN9Yk7hs/IMG-7491.jpg") no-repeat center/cover;
   color: white;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
+  text-align: center;
+  backdrop-filter: brightness(0.8);
 }
 
 h2 {
@@ -99,22 +65,19 @@ h2 {
 input {
   width: 100%;
   padding: 12px;
-  font-size: 16px;
   margin-top: 15px;
-  box-sizing: border-box;
 }
 
 button {
   width: 100%;
   padding: 12px;
   margin-top: 10px;
-  font-size: 16px;
 }
 
 #messages div {
   margin-top: 10px;
+  background: rgba(0,0,0,0.5);
   padding: 10px;
-  background: #222;
   border-radius: 6px;
 }
 </style>
@@ -123,20 +86,14 @@ button {
 <body>
 
 <div id="game">
-  <div class="sun"></div>
-  <div class="ground"></div>
 
-  <div class="tree" style="left:10%">
-    <div class="leaves"></div>
-    <div class="trunk"></div>
-  </div>
+  <!-- ديكور -->
+  <img src="https://i.ibb.co/60j1ZR7p/IMG-7488.jpg" class="decor" style="top:10%; left:10%;">
+  <img src="https://i.ibb.co/v6638VyQ/IMG-7489.jpg" class="decor" style="bottom:20%; right:10%;">
 
-  <div class="tree" style="left:70%">
-    <div class="leaves"></div>
-    <div class="trunk"></div>
-  </div>
-
+  <!-- الصندوق -->
   <div id="box"></div>
+
 </div>
 
 <div id="page2">
@@ -161,16 +118,12 @@ function moveBox() {
   let maxX = window.innerWidth - box.offsetWidth;
   let maxY = window.innerHeight - box.offsetHeight;
 
-  let x = Math.random() * maxX;
-  let y = Math.random() * maxY;
-
-  box.style.left = x + "px";
-  box.style.top = y + "px";
+  box.style.left = Math.random() * maxX + "px";
+  box.style.top = Math.random() * maxY + "px";
 }
 
 moveBox();
 
-/* دعم لمس + كليك */
 function handleClick() {
   clicks++;
   sound.currentTime = 0;
@@ -192,7 +145,6 @@ function handleClick() {
 box.addEventListener("click", handleClick);
 box.addEventListener("touchstart", handleClick);
 
-/* رسائل */
 function addMessage() {
   let input = document.getElementById("msgInput");
   let text = input.value;
@@ -201,6 +153,7 @@ function addMessage() {
 
   let div = document.createElement("div");
   div.textContent = text;
+
   document.getElementById("messages").appendChild(div);
 
   localStorage.setItem("msgs",
