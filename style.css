@@ -1,0 +1,217 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #1a1a1a;
+  color: #fff;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.page {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.8s ease;
+}
+
+.hidden {
+  display: none;
+}
+
+/* خلفية قلوب ماين كرافت */
+.hearts-background {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 100, 100, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 100, 100, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255, 100, 100, 0.12) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hearts-background::before {
+  content: '❤️ ❤️ ❤️';
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  font-size: 30px;
+  opacity: 0.1;
+  animation: float 15s infinite linear;
+}
+
+.hearts-background::after {
+  content: '❤️ ❤️';
+  position: absolute;
+  bottom: 15%;
+  right: 15%;
+  font-size: 25px;
+  opacity: 0.1;
+  animation: float 20s infinite linear reverse;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -30px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* العنوان */
+.title {
+  font-size: 2.2rem;
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 3px 3px 0 #000;
+  z-index: 10;
+  position: relative;
+}
+
+/* الصندوق بستايل ماين كرافت */
+.minecraft-box {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+  z-index: 10;
+}
+
+.minecraft-box:active {
+  transform: scale(0.95);
+}
+
+.box-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 8px solid #4a2c0f;
+  background: linear-gradient(135deg, #8B5A2B, #A67B5B);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6),
+              0 10px 0 #3d240c;
+}
+
+.box-face.front {
+  transform: translateZ(20px);
+}
+
+.box-face.top {
+  background: #C9A97E;
+  transform: rotateX(45deg) translateY(-40px);
+  height: 60px;
+  top: -30px;
+}
+
+.box-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 4px 4px 0 #000;
+  z-index: 5;
+}
+
+/* الصفحة الثانية */
+.message-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+  z-index: 10;
+  position: relative;
+}
+
+.minecraft-frame {
+  background: #3d240c;
+  border: 12px solid #8B5A2B;
+  border-image: linear-gradient(#C9A97E, #8B5A2B) 1;
+  padding: 40px 30px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  margin-bottom: 40px;
+}
+
+.message p {
+  font-size: 1.55rem;
+  line-height: 1.6;
+  margin: 18px 0;
+  text-shadow: 2px 2px 3px #000;
+}
+
+.signature {
+  font-size: 1.8rem;
+  margin-top: 30px;
+  color: #ffdddd;
+}
+
+.signature-small {
+  font-size: 1.3rem;
+  color: #ffcccc;
+}
+
+/* منطقة الرد */
+.reply-section {
+  background: rgba(0,0,0,0.4);
+  padding: 25px;
+  border-radius: 12px;
+  border: 6px solid #8B5A2B;
+}
+
+.reply-section h2 {
+  margin-bottom: 15px;
+  color: #ffdddd;
+}
+
+#reply-input {
+  width: 100%;
+  height: 120px;
+  padding: 15px;
+  font-size: 1.1rem;
+  border: 6px solid #4a2c0f;
+  background: #fff;
+  color: #000;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-family: inherit;
+}
+
+#send-btn {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 14px 40px;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #aa0000;
+  transition: all 0.2s;
+}
+
+#send-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #aa0000;
+}
+
+.replies {
+  margin-top: 25px;
+  text-align: right;
+}
+
+.reply {
+  background: #2a1a0a;
+  padding: 15px;
+  margin: 12px 0;
+  border-left: 6px solid #ff8888;
+  border-radius: 6px;
+  font-size: 1.15rem;
+}
