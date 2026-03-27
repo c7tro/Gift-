@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>رسالة لأمي ❤️</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- الصفحة الأولى -->
+  <div id="page1" class="page">
+    <div class="hearts-background"></div>
+    
+    <div class="container">
+      <h1 class="title">اضغط على الصندوق يا قاسم ❤️</h1>
+      
+      <div id="minecraft-box" class="minecraft-box">
+        <div class="box-face front"></div>
+        <div class="box-face top"></div>
+        <div class="box-label">؟</div>
+      </div>
+      
+      <p class="attempts">محاولات: <span id="attempts-count">0</span>/3</p>
+    </div>
+  </div>
+
+  <!-- الصفحة الثانية -->
+  <div id="page2" class="page hidden">
+    <div class="hearts-background"></div>
+    
+    <div class="message-container">
+      <div class="minecraft-frame">
+        <div class="message">
+          <p>السلام عليكم كيف حالك أمي الغالية ❤️</p>
+          <p>مشتاقلك يما وإن شاء الله برجع بأسرع وقت</p>
+          <p>سويت هذا الموقع من الزهق.. ايش رأيك فيه يما؟</p>
+          <p class="signature">من ابنك قاسم</p>
+          <p class="signature-small">وسلمي على رحمة ورغد يما</p>
+        </div>
+      </div>
+
+      <div class="reply-section">
+        <h2>ردك على الرسالة يما:</h2>
+        <textarea id="reply-input" placeholder="اكتبي رسالتك هنا..."></textarea>
+        <button id="send-btn">إرسال الرد</button>
+        
+        <div id="replies" class="replies"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
